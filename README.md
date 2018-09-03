@@ -2,3 +2,5 @@ SIT107 TEAM PROJECT SPRINT 1
 
 TIFFANY GRAY
 GREG MCINTYRE
+
+email: hrandemail@gmail.com
