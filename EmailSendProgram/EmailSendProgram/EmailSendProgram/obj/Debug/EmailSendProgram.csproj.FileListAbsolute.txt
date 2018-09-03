@@ -1,0 +1,7 @@
+C:\git\SIT107-Team-Project-Sprint-1\EmailSendProgram\EmailSendProgram\EmailSendProgram\bin\Debug\EmailSendProgram.exe.config
+C:\git\SIT107-Team-Project-Sprint-1\EmailSendProgram\EmailSendProgram\EmailSendProgram\bin\Debug\EmailSendProgram.exe
+C:\git\SIT107-Team-Project-Sprint-1\EmailSendProgram\EmailSendProgram\EmailSendProgram\bin\Debug\EmailSendProgram.pdb
+C:\git\SIT107-Team-Project-Sprint-1\EmailSendProgram\EmailSendProgram\EmailSendProgram\obj\Debug\EmailSendProgram.csprojAssemblyReference.cache
+C:\git\SIT107-Team-Project-Sprint-1\EmailSendProgram\EmailSendProgram\EmailSendProgram\obj\Debug\EmailSendProgram.csproj.CoreCompileInputs.cache
+C:\git\SIT107-Team-Project-Sprint-1\EmailSendProgram\EmailSendProgram\EmailSendProgram\obj\Debug\EmailSendProgram.exe
+C:\git\SIT107-Team-Project-Sprint-1\EmailSendProgram\EmailSendProgram\EmailSendProgram\obj\Debug\EmailSendProgram.pdb
