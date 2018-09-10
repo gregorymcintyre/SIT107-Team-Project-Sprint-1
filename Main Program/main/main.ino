@@ -16,9 +16,10 @@ byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 IPAddress ip(192, 168, 20, 177);
 EthernetServer server(80);
 
-//HR Variables
+//HR Global Variables
 bool HRIrregular = false;
 int HeartRate = 0;
+int Counter = 0; //test counter
 
 void setup() {
 //webserver setup
@@ -26,7 +27,6 @@ void setup() {
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
   server.begin();
@@ -39,12 +39,22 @@ void setup() {
 
 
 void loop() {
-  readData();
-  assessData();
-  WriteHTML(); 
+  readData(); //sense
+  assessData(); //think
+  WriteHTML(); //act
 }
 
 void WriteHTML (){
+  /* WriteHTML 
+   *  
+   *  Greg Mcintyre
+   *  
+   *  writes a html webserver with an output of the information. Displays status information in console and display information in webserver. web server is intentionally kept simeple for future development into email/sms
+   *  
+   *  can be accessed at 'IPAddress' variable
+   * 
+   */
+   
   //Web Server Output
   // listen for incoming clients
   EthernetClient client = server.available();
@@ -56,9 +66,6 @@ void WriteHTML (){
       if (client.available()) {
         char c = client.read();
         Serial.write(c);
-        // if you've gotten to the end of the line (received a newline
-        // character) and the line is blank, the http request has ended,
-        // so you can send a reply
         if (c == '\n' && currentLineIsBlank) {
           // send a standard http response header
           client.println("HTTP/1.1 200 OK");
@@ -80,8 +87,11 @@ void WriteHTML (){
               client.print("Heart Rate is Normal");
             }
             client.println("<br />");
-            
 
+            //testing counter
+            client.println(Counter++);
+            client.println("<br />");
+            
           //}
           client.println("</html>");
           break;
@@ -113,6 +123,7 @@ void assessData(){
 
 
 void readData(){
+  
 }//sense
 
 
