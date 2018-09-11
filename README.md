@@ -6,7 +6,7 @@ GREG MCINTYRE
 email: hrandemail@gmail.com
 temboo: HRandEmail
 
-##Instruction for Use
+<h2>Instruction for Use</h2>
 
 1. Connect Ethernet Shield over Arduino
 2. Connect HR monitor to GND, 3.3V and A0
@@ -16,7 +16,7 @@ temboo: HRandEmail
 6. observer web server for BPM information and alert events
 
 
-##Log
+<h2>Log</h2>
 
 7/9/19 
 Problems with com port access, both the c# and the arduino program were attempting to use the same port and causing a lock. exploring using the arduino ethernet shield -g
