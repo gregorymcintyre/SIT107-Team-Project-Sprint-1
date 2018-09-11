@@ -1,7 +1,7 @@
 <h1>SIT107 TEAM PROJECT SPRINT 1</h1>
 
-TIFFANY GRAY
-GREG MCINTYRE
+*TIFFANY GRAY
+*GREG MCINTYRE
 
 email: hrandemail@gmail.com
 temboo: HRandEmail
