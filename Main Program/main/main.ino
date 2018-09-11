@@ -16,24 +16,33 @@ byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 IPAddress ip(192, 168, 20, 177);
 EthernetServer server(80);
 
+//HR Variables
+int Signal;
+int PuleseSensorPin = 0;
+int Threshold  = 500;
+
+
 //HR Global Variables
 bool HRIrregular = false;
 int HeartRate = 0;
 int Counter = 0; //test counter
 
 void setup() {
-//webserver setup
   Serial.begin(9600);
+  
+  //webserver setup
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
+  
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
   server.begin();
   Serial.print("server is at ");
   Serial.println(Ethernet.localIP());
 
-//Heart Rate Setup
+  //Heart Rate Setup
+  pinMode(LED_BUILTIN, OUTPUT); //testing
   
 }
 
@@ -41,7 +50,7 @@ void setup() {
 void loop() {
   readData(); //sense
   assessData(); //think
-  WriteHTML(); //act
+  //WriteHTML(); //act
 }
 
 void WriteHTML (){
@@ -89,7 +98,7 @@ void WriteHTML (){
             client.println("<br />");
 
             //testing counter
-            client.println(Counter++);
+            client.println(Signal);
             client.println("<br />");
             
           //}
@@ -124,10 +133,25 @@ void assessData(){
 
 void readData(){
   /* readData
+   *  
+   *  Tiffany Gray
    *    
    *  read analog data from the 
    * 
    */
+
+  Signal = analogRead(PuleseSensorPin);
+  Serial.println(Signal);
+  delay(10);
+
+  if(Signal < Threshold){
+    digitalWrite(LED_BUILTIN, HIGH);
+    //Serial.println("beat");
+  }else{
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+
+   
 }//sense
 
 
