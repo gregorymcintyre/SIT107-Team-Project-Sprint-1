@@ -1,0 +1,17 @@
+Hello My name is Tiffany
+
+and my name is Greg and we would like to talk to you about our smart living project to help develop indepence for the aged.
+
+<background on need> https://www.wearable-technologies.com/2015/05/wearables-for-elderly/
+
+to solve this problem we would like to create an IOT heart rate monitor designed to notify emergency contacts or emergency services when the users heart rate becomes irregular
+
+<Sense-Think-Act breakdown>
+
+the project will use a HR sensor to collect heart beat data
+
+it will use a collection of this heart rate data to calculate the bpm of the user
+
+and if the heart rate is outside of normal levels it will alert 
+
+

@@ -123,7 +123,11 @@ void assessData(){
 
 
 void readData(){
-  
+  /* readData
+   *    
+   *  read analog data from the 
+   * 
+   */
 }//sense
 
 
