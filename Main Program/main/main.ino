@@ -61,8 +61,7 @@ void loop() {
   timer.run();  //start interval timer/think
   WriteHTML(); //load web server/act
   readData(); //sense
-  //assessData(); //think
-  
+
 }
 
 void WriteHTML (){
@@ -125,6 +124,7 @@ void WriteHTML (){
       }
     }
     delay(1);
+    
     // close the connection:
     client.stop();
     Serial.println("client disconnected");
@@ -133,22 +133,13 @@ void WriteHTML (){
 
 }//act
 
-void assessData(){
-  if (HeartRate < 30){
-    HRIrregular = true;
-  }
-  else{
-    HRIrregular = false;
-  }
-}//think
-
-
 void readData(){
   /* readData
    *  
    *  Tiffany Gray
    *    
-   *  read analog data from the 
+   *  read analog data from the pulse sensor
+   *  adds to HRCount variable uses a boolean to identify if 'beat' has been counted
    * 
    */
 
@@ -178,6 +169,17 @@ void readData(){
 
 
 void BPMCalc(){
+/*BPM Calc
+ * 
+ * Greg McIntyre
+ * 
+ * Sample is based on the 5 second refresh of the web server for consistancy not for function
+ * this updates the BPM and HRIrregular variables
+ * 
+ * 
+ */
+
+  
   BPM = HRcount*12;
   HRcount = 0;
   //Serial.println(BPM);
