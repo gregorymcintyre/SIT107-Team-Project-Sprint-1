@@ -10,6 +10,7 @@
 //Web Server Libraries
 #include <SPI.h> 
 #include <Ethernet.h>
+#include <SimpleTimer.h>
 
 //web server settings
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
@@ -19,13 +20,19 @@ EthernetServer server(80);
 //HR Variables
 int Signal;
 int PuleseSensorPin = 0;
-int Threshold  = 500;
+int UpperThreshold  = 525;
+int LowerThreshold  = 505;
+bool Beat = true;
+int HRcount = 0;
 
 
-//HR Global Variables
-bool HRIrregular = false;
+//HR Analysis Variables
+bool HRIrregular;
 int HeartRate = 0;
-int Counter = 0; //test counter
+//int Counter = 0; //test counter
+SimpleTimer timer;
+int BPM = 0;
+
 
 void setup() {
   Serial.begin(9600);
@@ -38,19 +45,24 @@ void setup() {
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
   server.begin();
-  Serial.print("server is at ");
+  Serial.print("System started. Server is at ");
   Serial.println(Ethernet.localIP());
 
   //Heart Rate Setup
   pinMode(LED_BUILTIN, OUTPUT); //testing
+
+  //timer setup
+  timer.setInterval(5000, BPMCalc);
   
 }
 
 
 void loop() {
+  timer.run();  //start interval timer/think
+  WriteHTML(); //load web server/act
   readData(); //sense
-  assessData(); //think
-  //WriteHTML(); //act
+  //assessData(); //think
+  
 }
 
 void WriteHTML (){
@@ -86,20 +98,20 @@ void WriteHTML (){
           client.println("<html>");
 
             client.print("Current heart rate is ");
-            client.print(HeartRate);
+            client.print(BPM);
+            client.print(" BPM");
             client.println("<br />");
             
-            if (HRIrregular){
+            if (HRIrregular == true){
               client.print("Heart Rate is IRREGULAR");
-            }
-            else{
+            } else {
               client.print("Heart Rate is Normal");
             }
             client.println("<br />");
 
             //testing counter
-            client.println(Signal);
-            client.println("<br />");
+            //client.println(Signal); //testing
+            //client.println("<br />");
             
           //}
           client.println("</html>");
@@ -141,18 +153,42 @@ void readData(){
    */
 
   Signal = analogRead(PuleseSensorPin);
-  Serial.println(Signal);
-  delay(10);
+  
+  
+  //Serial.println(Signal);
 
-  if(Signal < Threshold){
-    digitalWrite(LED_BUILTIN, HIGH);
-    //Serial.println("beat");
-  }else{
-    digitalWrite(LED_BUILTIN, LOW);
+  if (Signal < 550 && Signal > 450){  //trying to filter
+
+    if(Signal >= UpperThreshold && Beat == false){
+      //if(Signal >= Threshold){
+          Beat = true;
+          HRcount++;
+          //Serial.println("Beat");
+          //Serial.println(HRcount);
+    }
+
+    if (Signal < LowerThreshold){
+      Beat = false;
+      //Serial.println("Reset");
+    }
   }
 
    
 }//sense
 
+
+void BPMCalc(){
+  BPM = HRcount*12;
+  HRcount = 0;
+  //Serial.println(BPM);
+
+  if ((BPM >= 40) && (BPM <=190)){
+    HRIrregular = false;
+    //Serial.println("*****************************Normal");
+  } else {
+    HRIrregular = true;
+    //Serial.println("*****************************Irregular");
+  }
+}
 
 
