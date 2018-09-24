@@ -11,6 +11,15 @@
 #include <SPI.h> 
 #include <Ethernet.h>
 #include <SimpleTimer.h>
+#include "SD.h"
+#include <Wire.h>
+#include "RTClib.h"
+
+//RTC Setting
+RTC_DS1307 RTC;
+const int chipSelect = 10;
+File logfile;
+DateTime now;
 
 //web server settings
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
@@ -51,6 +60,10 @@ void setup() {
   //Heart Rate Setup
   pinMode(LED_BUILTIN, OUTPUT); //testing
 
+  initSDcard();
+  createFile();
+  initRTC();
+
   //timer setup
   timer.setInterval(5000, BPMCalc);
   
@@ -58,8 +71,9 @@ void setup() {
 
 
 void loop() {
+  
   timer.run();  //start interval timer/think
-  WriteHTML(); //load web server/act
+  //WriteHTML(); //load web server/act
   readData(); //sense
 
 }
@@ -191,6 +205,96 @@ void BPMCalc(){
     HRIrregular = true;
     //Serial.println("*****************************Irregular");
   }
+
+  logtoFile();
 }
+
+void initSDcard()
+{
+  Serial.print("Initializing SD card...");
+  // make sure that the default chip select pin is set to
+  // output, even if you don't use it:
+  pinMode(10, OUTPUT);
+
+  // see if the card is present and can be initialized:
+  if (!SD.begin(chipSelect)) {
+    Serial.println("Card failed, or not present");
+    // don't do anything more:
+    return;
+  }
+  Serial.println("card initialized.");
+
+}
+
+void createFile()
+{
+  //file name must be in 8.3 format (name length at most 8 characters, follwed by a '.' and then a three character extension.
+  char filename[] = "MLOG00.CSV";
+  for (uint8_t i = 0; i < 100; i++) {
+    filename[4] = i / 10 + '0';
+    filename[5] = i % 10 + '0';
+    if (! SD.exists(filename)) {
+      // only open a new file if it doesn't exist
+      logfile = SD.open(filename, FILE_WRITE);
+      break;  // leave the loop!
+    }
+  }
+
+  if (! logfile) {
+    error("couldnt create file");
+  }
+
+  Serial.print("Logging to: ");
+  Serial.println(filename);
+}
+
+void initRTC()
+{
+  Wire.begin();
+  if (!RTC.begin()) {
+    logfile.println("RTC failed");
+#if ECHO_TO_SERIAL
+    Serial.println("RTC failed");
+#endif  //ECHO_TO_SERIAL
+
+  }
+}
+
+void error(char const *str)
+{
+  Serial.print("error: ");
+  Serial.println(str);
+
+  while (1);
+}
+
+void logtoFile()
+{
+    now = RTC.now();
+    logfile.print(now.year(), DEC);
+    logfile.print("/");
+    logfile.print(now.month(), DEC);
+    logfile.print("/");
+    logfile.print(now.day(), DEC);
+    logfile.print(" ");
+    logfile.print(now.hour(), DEC);
+    logfile.print(":");
+    logfile.print(now.minute(), DEC);
+    logfile.print(":");
+    logfile.print(now.second(), DEC); //logs date stamp
+
+    logfile.print(", ");
+    logfile.print(BPM);
+    logfile.println(" bpm");  //logs bpm
+
+    logfile.flush();
+
+    Serial.print("Logged "); //Testing
+    Serial.print(BPM);
+    Serial.println(" bpm");  //logs bpm
+    
+    
+}
+
 
 
