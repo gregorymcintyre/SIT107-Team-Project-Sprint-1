@@ -289,9 +289,9 @@ void logtoFile()
 
     logfile.flush();
 
-    Serial.print("Logged "); //Testing
-    Serial.print(BPM);
-    Serial.println(" bpm");  //logs bpm
+    //Serial.print("Logged "); //Testing
+    //Serial.print(BPM);
+    //Serial.println(" bpm");  //logs bpm
     
     
 }
